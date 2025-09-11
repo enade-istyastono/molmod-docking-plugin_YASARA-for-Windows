@@ -1,0 +1,119 @@
+# YASARA PLUGIN
+# TOPIK		: Penapisan Virtual Berbasis Struktur
+# JUDUL		: MOLMOD Docking from YASARA Object format
+# PENULIS	: Enade Perdana Istyastono
+# LICENSE	: Hak Cipta 2025 Enade Perdana Istyastono   
+# DESKRIPSI	: Plugin ini dirancang untuk membuat Molecular Docking untuk Virtual Screening menjadi lebih user friendly.
+#
+"""
+MainMenu: Options
+  PullDownMenu after MOLMOD.ID: MOLMOD.ID docking
+    SubMenu after Redocking: Docking
+      Request: None
+"""
+
+if not Structure
+  RaiseError "This plugin requires YASARA Structure"
+
+Console Off
+Clear
+
+WD,LigTest,LigRes,RepNo=
+  ShowWin Type=TextInput,Title="Input File",
+          Text="Please define the input file (no space, without extension):",
+		  Text="_P_ath to the working directory:",
+          Text="_L_igand file name (in yob format):,test_ligand",
+          Text="_L_igand residue name (3-letter-code):,Unk",
+          Text="Replication _f_requency:,100"
+		  
+if (RepNo)>999
+  RaiseError 'Too many docking replications, the simulations could take forever'
+  
+CD (WD)
+Shell mkdir (LigRes)-(LigTest)-dock
+CD (LigRes)-(LigTest)-dock
+
+CopyFile ..\(LigTest).yob, tmp-ligand.yob
+
+for i=001 to (RepNo)
+  Shell mkdir dock_(i)
+  CD dock_(i)
+  docknum=(i)
+  CopyFile ..\..\dock_receptor.sce, test_receptor.sce 
+  CopyFile ..\tmp-ligand.yob, test_ligand.yob
+  MacroTarget = './test'
+  RandomSeed Time
+  include dock_run.mcr
+  Console Off
+  Clear
+  Shell del *.adr *.pdbqt
+  CD ..
+  Clear
+Console Off
+DelFile tmp-receptor.sce
+DelFile tmp-ligand.yob
+
+for i=001 to (RepNo)
+  Shell wsl grep -A2 "Run" dock_(i)/test.log | wsl tail -1 | wsl awk -v var=(i) '{print var" "$3/1}'>> tmp1
+
+Shell wsl sort -k2,2n tmp1 | wsl  tail -1 | wsl awk '{print $1}' > tmp2
+CopyFile (MacroDir)\molmod_02-03_best-of-the-best-copy.sh,tmp.sh
+Shell wsl -e bash ./tmp.sh
+DelFile tmp1
+DelFile tmp2
+DelFile tmp.sh
+
+for i=001 to (RepNo)
+  CD dock_(i)
+  docknum=(i)
+  LoadYOb ..\best-of-the-best.yob
+  LoadYOb test_001.yob
+  DelRes !(LigRes)
+  TransferObj 2,1
+  DelAtom Element H
+  LogAs rmsd2BoB.txt
+  RMSDObj 1,2,Match=AtomName+AltLoc,Flip=Yes,Unit=Obj
+  Shell wsl grep test rmsd2BoB.txt | wsl awk '{print "RMSD the best pose from dock_(docknum) to the best-of-the-best pose = "$9" angstrom."}' >> ../rmsd.all.txt
+  Clear
+  CD ..
+CopyFile (MacroDir)\molmod_02-03_cluster-based-on-BotB.sh,tmp.sh
+Shell wsl -e bash ./tmp.sh
+DelFile tmp.sh
+LoadYOb best-of-the-best.yob,Transfer=No
+for i=001 to (RepNo)
+  LoadYOb dock_(i)\test_001.yob,Transfer=Yes
+DelRes !(LigRes)
+Style Stick
+HideAtom Element H with bond to Element C
+Wait 7,Unit=Seconds  
+ZoomAll Steps=20
+Wait 7,Unit=Seconds  
+HUD Off
+ColorObj 1,Magenta
+SavePNG overlay.png
+Hud Obj
+
+WriteReport Title,Filename=report-docking,Text='Docking Report'
+WriteReport Heading,2,'Overlay of the best poses to the best-of-the-best pose'
+WriteReport Image,Filename=overlay.png,Style=Figure, Caption = 'Overlay of the best poses to the best-of-the-best pose. Note: the best-of-the-best pose in magenta.'
+WriteReport Heading,2,'RMSD to the best-of-the-best pose'
+for line in file rmsd.all.txt
+  WriteReport Paragraph,'(line)'
+WriteReport Heading,2,'The docking simulations resulting the best pose that do not belong to the 1st cluster'
+for line in file cluster02.etc.lst
+  WriteReport Paragraph,'(line)'
+WriteReport Heading,2,'Notes:'
+WriteReport Paragraph,'a. The 1st cluster are the docking simulations resulting in the best poses that have RMSD values of less than or equal to 2.0 angstrom to the best-of-the-best pose.'
+WriteReport Paragraph,'b. The file for Figure 1: "file://overlay.png"'
+WriteReport Paragraph,'c. The RMSD values file: "file://rmsd.all.txt"'
+WriteReport End
+CD ..
+choice = ShowWin Type=RadioButton,Title="The docking simulations have been completed.", Text="The report was prepared and stored in the file report-docking.html.", Text="_E_xit and show the report, or", Text="_C_ontinue using YASARA."
+if (choice) == 2
+  ShowButton Continue
+  Wait Button
+  Clear
+if (choice) == 1
+  ShowURL (LigRes)-(LigTest)-dock\report-docking.html
+  Wait 7,Unit=Seconds  
+  Exit

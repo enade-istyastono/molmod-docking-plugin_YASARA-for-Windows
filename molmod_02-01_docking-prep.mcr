@@ -1,0 +1,58 @@
+# YASARA PLUGIN
+# TOPIK		: Penapisan Virtual Berbasis Struktur
+# JUDUL		: MOLMOD Docking Preparation
+# PENULIS	: Enade Perdana Istyastono
+# LICENSE	: Hak Cipta 2025 Enade Perdana Istyastono   
+# DESKRIPSI	: Plugin ini dirancang untuk membuat Molecular Docking untuk Virtual Screening menjadi lebih user friendly.
+#
+"""
+MainMenu: Options
+  PullDownMenu after MOLMOD.ID: MOLMOD.ID docking
+    SubMenu: Preparation
+      Request: None
+"""
+
+if not Structure
+  RaiseError "This plugin requires YASARA Structure"
+
+Console Off
+
+Clear
+
+WD,complex,LigName =
+  ShowWin Type=TextInput,Title="Input File",
+          Text="Please define the input file (no space, without extension):",
+		  Text="_P_ath to the working directory:",
+          Text="_F_ile name:, complex",
+          Text="_L_igand residue name (3-letters-code):, Lig"
+
+CD (WD)
+LoadYOb (complex).yob,Transfer=No 
+SelectRes (LigName)
+Cell Auto, Extension=5,Shape=Cube,selected
+DelRes Selected
+NameObj 1,receptor
+SaveSce dock_receptor.sce
+Clear
+LoadYOb (complex).yob,Transfer=No 
+DelRes !(LigName)
+SaveYOb 1,ref_ligand.yob
+if runWithMacro and ConsoleMode and !IndentationLevel
+  Exit
+LoadSce dock_receptor.sce
+LoadYOb ref_ligand.yob,Transfer=Yes
+
+choice = ShowWin Type=RadioButton,Title="The preparation for docking  simulations have been completed.", Text="Continue to redocking simulations?", Text="_Y_es, or", Text="_N_o, but continue using YASARA."
+if (choice) == 2
+  ShowButton Continue
+  Wait Button
+  Clear
+if (choice) == 1
+  Clear
+  PlayMacro (YASARADir)\plg\molmod_02-02_docking-redock.mcr
+
+
+
+ShowButton Continue
+Wait Button
+Clear
