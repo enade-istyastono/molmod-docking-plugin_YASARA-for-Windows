@@ -4,3 +4,8 @@ YASARA Structure plugins for performing protein-ligand docking simulations, deve
 <p><b>Dependencies:</b>
 <br>1. YASARA Structure for Windows (version minimum: 25.1.13)
 <br>2. Ubuntu (tested working version: 24.04) in Windows Subsystem for Linux.</p>  
+<p></p>
+<p><b>Installation:</b> Copy all mcr and sh files to the folder {YASARADir}\plg or the plugin folder of YASARA Structure.</p>
+<p></p>
+<p><b>Note:</b> Tutorial to use the plugins is under preparation.</p>
+
