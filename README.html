@@ -1,5 +1,5 @@
-# MOLMOD Docking Plugins for YASARA Structure for Windows
-YASARA Structure plugins for performing protein-ligand docking simulations, developed by the CTO of MOLMOD ID.  
+# MOLMOD Docking Plugins for YASARA Structure for Windows 11
+YASARA Structure plugins for performing protein-ligand docking simulations. An improved version from <a href="https://molmod.id/yasara/molmod-yasara-plugins.zip">the 2023 version</a>. 
 <p></p>
 <p><b>Dependencies:</b>
 <br>1. YASARA Structure for Windows (version minimum: 25.1.13)
