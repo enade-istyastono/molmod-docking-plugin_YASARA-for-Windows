@@ -76,7 +76,7 @@ for i=001 to (RepNo)
   Shell grep test rmsd2BoB.txt | awk '{print "RMSD the best pose from dock_(docknum) to the best-of-the-best pose = "$9" angstrom."}' >> ../rmsd.all.txt
   Clear
   CD ..
-CopyFile (MacroDir)\molmod_02-03_cluster-based-on-BotB.sh,tmp.sh
+CopyFile (MacroDir)/molmod_02-03_cluster-based-on-BotB.sh,tmp.sh
 Shell bash ./tmp.sh
 DelFile tmp.sh
 LoadYOb best-of-the-best.yob,Transfer=No
@@ -117,6 +117,7 @@ if (choice) == 1
   ShowURL (LigRes)-(LigTest)-dock/report-docking.html
   Wait 7,Unit=Seconds  
   Exit
+
 
 
 
