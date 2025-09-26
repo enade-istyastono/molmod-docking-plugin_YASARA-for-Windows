@@ -6,8 +6,7 @@ YASARA Structure plugins for performing protein-ligand docking simulations. An i
   <br>Department of Pharmacy, School of Medicine and Health Sciences, Atma Jaya Catholic University of Indonesia. </p>  
 <p></p>
 <p><b>Dependencies:</b>
-<br>1. YASARA Structure for Windows (version minimum: 25.1.13)
-<br>2. Ubuntu (tested working version: 24.04) in Windows Subsystem for Linux.</p>  
+<br>YASARA Structure for Windows (version minimum: 25.1.13)</p>  
 <p></p>
 <p><b>Installation:</b> Open YASARA Structure and run the install.mcr file from the software. To uninstall the plugins, run the uninstall.mcr file from the software.</p>
 <p></p>
