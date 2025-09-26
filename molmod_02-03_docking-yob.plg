@@ -33,14 +33,14 @@ CD (WD)
 Shell mkdir (LigRes)-(LigTest)-dock
 CD (LigRes)-(LigTest)-dock
 
-CopyFile ..\(LigTest).yob, tmp-ligand.yob
+CopyFile ../(LigTest).yob, tmp-ligand.yob
 
 for i=001 to (RepNo)
   Shell mkdir dock_(i)
   CD dock_(i)
   docknum=(i)
-  CopyFile ..\..\dock_receptor.sce, test_receptor.sce 
-  CopyFile ..\tmp-ligand.yob, test_ligand.yob
+  CopyFile ../../dock_receptor.sce, test_receptor.sce 
+  CopyFile ../tmp-ligand.yob, test_ligand.yob
   MacroTarget = './test'
   RandomSeed Time
   include dock_run.mcr
@@ -54,11 +54,11 @@ DelFile tmp-receptor.sce
 DelFile tmp-ligand.yob
 
 for i=001 to (RepNo)
-  Shell wsl grep -A2 "Run" dock_(i)/test.log | wsl tail -1 | wsl awk -v var=(i) '{print var" "$3/1}'>> tmp1
+  Shell grep -A2 "Run" dock_(i)/test.log | wsl tail -1 | wsl awk -v var=(i) '{print var" "$3/1}'>> tmp1
 
-Shell wsl sort -k2,2n tmp1 | wsl  tail -1 | wsl awk '{print $1}' > tmp2
+Shell sort -k2,2n tmp1 | wsl  tail -1 | wsl awk '{print $1}' > tmp2
 CopyFile (MacroDir)\molmod_02-03_best-of-the-best-copy.sh,tmp.sh
-Shell wsl -e bash ./tmp.sh
+Shell bash ./tmp.sh
 DelFile tmp1
 DelFile tmp2
 DelFile tmp.sh
@@ -66,22 +66,22 @@ DelFile tmp.sh
 for i=001 to (RepNo)
   CD dock_(i)
   docknum=(i)
-  LoadYOb ..\best-of-the-best.yob
+  LoadYOb ../best-of-the-best.yob
   LoadYOb test_001.yob
   DelRes !(LigRes)
   TransferObj 2,1
   DelAtom Element H
   LogAs rmsd2BoB.txt
   RMSDObj 1,2,Match=AtomName+AltLoc,Flip=Yes,Unit=Obj
-  Shell wsl grep test rmsd2BoB.txt | wsl awk '{print "RMSD the best pose from dock_(docknum) to the best-of-the-best pose = "$9" angstrom."}' >> ../rmsd.all.txt
+  Shell grep test rmsd2BoB.txt | awk '{print "RMSD the best pose from dock_(docknum) to the best-of-the-best pose = "$9" angstrom."}' >> ../rmsd.all.txt
   Clear
   CD ..
 CopyFile (MacroDir)\molmod_02-03_cluster-based-on-BotB.sh,tmp.sh
-Shell wsl -e bash ./tmp.sh
+Shell bash ./tmp.sh
 DelFile tmp.sh
 LoadYOb best-of-the-best.yob,Transfer=No
 for i=001 to (RepNo)
-  LoadYOb dock_(i)\test_001.yob,Transfer=Yes
+  LoadYOb dock_(i)/test_001.yob,Transfer=Yes
 DelRes !(LigRes)
 Style Stick
 HideAtom Element H with bond to Element C
@@ -114,6 +114,7 @@ if (choice) == 2
   Wait Button
   Clear
 if (choice) == 1
-  ShowURL (LigRes)-(LigTest)-dock\report-docking.html
+  ShowURL (LigRes)-(LigTest)-dock/report-docking.html
   Wait 7,Unit=Seconds  
   Exit
+
