@@ -49,10 +49,11 @@ if (choice) == 2
   Clear
 if (choice) == 1
   Clear
-  PlayMacro (YASARADir)\plg\molmod_02-02_docking-redock.mcr
+  PlayMacro (YASARADir)/plg/molmod_02-02_docking-redock.mcr
 
 
 
 ShowButton Continue
 Wait Button
 Clear
+
