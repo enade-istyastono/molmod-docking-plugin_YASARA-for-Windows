@@ -31,7 +31,7 @@ if (RepNo)>999
 CD (WD)
 Shell mkdir redocking
 CD redocking
-LoadYOb ..\ref_ligand.yob,Transfer=No
+LoadYOb ../ref_ligand.yob,Transfer=No
 TransformObj 1,KeepPos=No
 ForceField AMBER14,SetPar=Yes
 Interactions Bond,Angle,Dihedral,Planarity,Coulomb,VdW
@@ -45,14 +45,14 @@ for i=001 to (RepNo)
   Shell mkdir dock_(i)
   CD dock_(i)
   docknum=(i)
-  CopyFile ..\..\dock_receptor.sce, dock_receptor.sce 
-  CopyFile ..\tmp-ligand.yob, dock_ligand.yob
+  CopyFile ../../dock_receptor.sce, dock_receptor.sce 
+  CopyFile ../tmp-ligand.yob, dock_ligand.yob
   MacroTarget = './dock'
   RandomSeed Time
   include dock_run.mcr
   Console Off
   Clear
-  CopyFile ..\..\ref_ligand.yob, ref_ligand.yob
+  CopyFile ../../ref_ligand.yob, ref_ligand.yob
   LoadYOb ref_ligand.yob
   LoadYOb dock_001.yob
   DelRes !(LigRes)
@@ -63,16 +63,16 @@ for i=001 to (RepNo)
   DelFile ref_ligand.yob
   DelFile dock_ligand.yob
   DelFile dock_receptor.yob
-  Shell wsl grep dock rmsd_bestpose.txt | wsl awk '{print "RMSD the best pose from dock_(docknum) to the reference ligand = "$9" angstrom."}' >> ../rmsd_bestpose_all.txt
+  Shell grep dock rmsd_bestpose.txt | awk '{print "RMSD the best pose from dock_(docknum) to the reference ligand = "$9" angstrom."}' >> ../rmsd_bestpose_all.txt
   Clear
-  Shell del *.adr *.pdbqt
+  Shell rm *.adr *.pdbqt
   CD ..
   Clear
 DelFile tmp-ligand.yob
 
-LoadYOb ..\ref_ligand.yob,Transfer=No
+LoadYOb ../ref_ligand.yob,Transfer=No
 for i=001 to (RepNo)
-  LoadYOb dock_(i)\dock_001.yob,Transfer=Yes
+  LoadYOb dock_(i)/dock_001.yob,Transfer=Yes
 DelRes !(LigRes)
 HideAtom Element H with bond to Element C
 ZoomAll Steps=20
@@ -101,6 +101,7 @@ if (choice) == 2
   Wait Button
   Clear
 if (choice) == 1
-  ShowURL redocking\report-redocking.html
+  ShowURL redocking/report-redocking.html
   Wait 7,Unit=Seconds  
   Exit
+
