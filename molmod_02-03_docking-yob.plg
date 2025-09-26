@@ -54,10 +54,10 @@ DelFile tmp-receptor.sce
 DelFile tmp-ligand.yob
 
 for i=001 to (RepNo)
-  Shell grep -A2 "Run" dock_(i)/test.log | wsl tail -1 | wsl awk -v var=(i) '{print var" "$3/1}'>> tmp1
+  Shell grep -A2 "Run" dock_(i)/test.log | tail -1 | wsl awk -v var=(i) '{print var" "$3/1}'>> tmp1
 
-Shell sort -k2,2n tmp1 | wsl  tail -1 | wsl awk '{print $1}' > tmp2
-CopyFile (MacroDir)\molmod_02-03_best-of-the-best-copy.sh,tmp.sh
+Shell sort -k2,2n tmp1 | tail -1 | awk '{print $1}' > tmp2
+CopyFile (MacroDir)/molmod_02-03_best-of-the-best-copy.sh,tmp.sh
 Shell bash ./tmp.sh
 DelFile tmp1
 DelFile tmp2
@@ -117,4 +117,5 @@ if (choice) == 1
   ShowURL (LigRes)-(LigTest)-dock/report-docking.html
   Wait 7,Unit=Seconds  
   Exit
+
 
