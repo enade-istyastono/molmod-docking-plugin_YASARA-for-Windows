@@ -4,7 +4,7 @@ YASARA Structure plugins for performing protein-ligand docking simulations. An i
 <p><b>Developed and maintained by:</b> 
   <br>Enade P. Istyastono
   <br>Department of Pharmacy, School of Medicine and Health Sciences, Atma Jaya Catholic University of Indonesia. 
-  <br> <a href="https://drive.google.com/file/d/1fst4JBEF9lJTsUyUvlXLzk0gRjUiGlHD/view?usp=sharing">Copyright &copy; 2025</a>  Atma Jaya Catholic University of Indonesia.</p>  
+  <br><a href="https://drive.google.com/file/d/1fst4JBEF9lJTsUyUvlXLzk0gRjUiGlHD/view?usp=sharing">Copyright &copy; 2025</a>  Atma Jaya Catholic University of Indonesia.</p>  
 <p></p>
 <p><b>Dependencies:</b>
 <br>1. YASARA Structure for Windows (version minimum: 25.1.13)
