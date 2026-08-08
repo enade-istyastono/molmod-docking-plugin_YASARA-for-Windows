@@ -78,6 +78,7 @@ HideAtom Element H with bond to Element C
 ZoomAll Steps=20
 HUD Off
 Style Stick
+HideAtom Element H with bond to Element C
 ColorObj 1,Magenta
 SavePNG overlay.png
 Hud Obj
