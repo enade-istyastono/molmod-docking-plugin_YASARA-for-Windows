@@ -43,7 +43,7 @@ for i=001 to (RepNo)
   CopyFile ..\tmp-ligand.yob, test_ligand.yob
   MacroTarget = './test'
   RandomSeed Time
-  include dock_run.mcr
+  include dock_run_molmod-vina.mcr
   Console Off
   Clear
   Shell del *.adr *.pdbqt
